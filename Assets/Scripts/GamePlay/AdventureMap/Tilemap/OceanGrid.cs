@@ -16,6 +16,12 @@ namespace TRSI.GamePlay.AdventureMap
             return grid.WorldToCell(worldPosition);
         }
         
+        public Vector3 WorldToGridSpace(Vector2 worldPosition)
+        {
+            var gridPosition = grid.WorldToCell(worldPosition);
+            return grid.CellToWorld(gridPosition);
+        }
+        
 
         public bool TryGetTile(Vector3 worldPosition, out OceanTile tile)
         {

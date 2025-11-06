@@ -1,10 +1,15 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 namespace TRSI.GamePlay.AdventureMap
 {
     public class BoatView : MonoBehaviour
     {
+        public bool isSelected;
         Transform m_transform;
+        
         
         public Vector3 WorldPosition
         {
@@ -15,6 +20,12 @@ namespace TRSI.GamePlay.AdventureMap
                 
                 return m_transform.position;
             }
+            set => m_transform.position = value;
+        }
+
+        public void MoveShip()
+        {
+            
         }
     }
 }
