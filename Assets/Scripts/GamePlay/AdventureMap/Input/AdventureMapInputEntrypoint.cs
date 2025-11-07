@@ -119,7 +119,7 @@ namespace RTSI.GamePlay.AdventureMap.Input
             Vector2 tileDifference = currentPosition - targetTile;
             Debug.Log("Tile Difference: " + tileDifference);
 
-            if (Mathf.Abs(tileDifference.x) == 2.0f || Mathf.Abs(tileDifference.y) == 2.0f)
+            if (Mathf.Abs(tileDifference.x) <= 2.0f && Mathf.Abs(tileDifference.y) <= 2.0f)
             {
                 m_boatView.WorldPosition = new Vector3(targetTile.x + 1, targetTile.y + 1, boatPosition.z);
             }
