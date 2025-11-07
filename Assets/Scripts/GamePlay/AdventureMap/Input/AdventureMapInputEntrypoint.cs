@@ -1,4 +1,5 @@
 ﻿using System;
+using GamePlay.AdventureMap.Tilemap.TileEvents;
 using RTSI.GameEntrypoint;
 using TRSI.GamePlay.AdventureMap;
 using TRSI.GamePlay.AdventureMap.Routes;
@@ -19,6 +20,8 @@ namespace RTSI.GamePlay.AdventureMap.Input
         
         AdventureMapInputs m_inputs;
         
+        TileEventManager m_Panel;
+        
         Vector2 m_mousePosition;
         Vector2 currentPosition;
         
@@ -30,6 +33,9 @@ namespace RTSI.GamePlay.AdventureMap.Input
             m_inputs.Player.PointerClick.performed    += OnPointerClick;
             m_inputs.Player.PointerPosition.performed += OnPointerMoved;
             m_inputs.Player.PauseMenu.performed       += OnPauseMenu;
+            
+            
+            m_Panel = GameObject.Find("Tile Event Manager").GetComponent<TileEventManager>();
         }
 
         void OnPauseMenu(InputAction.CallbackContext obj)
@@ -98,6 +104,7 @@ namespace RTSI.GamePlay.AdventureMap.Input
                         Debug.Log("Target Tile: " + targetPosition + " Boat Current Position: " + m_boatView.WorldPosition);
                         checkValidTileMovement(targetPosition, m_boatView.WorldPosition);
                         m_boatView.isSelected = false;
+                        m_Panel.ShowPanel("Boat Here");
                     }
                     else
                     {
