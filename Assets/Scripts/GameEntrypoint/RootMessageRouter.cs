@@ -5,13 +5,7 @@ using VitalRouter;
 
 namespace RTSI.GameEntrypoint
 {
-    public struct LoadMainMenuSceneCommand : ICommand {}
-    public struct UnloadMainMenuSceneCommand : ICommand {}
-    public struct LoadGameSceneCommand : ICommand {}
-    public struct UnloadGameSceneCommand : ICommand {}
-    
-    public struct UnloadInGameMenuSceneCommand : ICommand {}
-    public struct LoadInGameMenuSceneCommand : ICommand {}
+
     
     [Routes]
     public partial class RootMessageRouter
@@ -53,6 +47,18 @@ namespace RTSI.GameEntrypoint
         async UniTask On(LoadInGameMenuSceneCommand _)
         {
             await m_sceneLoaderService.LoadPauseMenuSceneAsync();
+        }
+
+        [Route]
+        async UniTask On(LoadEventSceneCommand _)
+        {
+            await m_sceneLoaderService.LoadAdventureEventsSceneAsync();
+        }
+
+        [Route]
+        async UniTask On(UnloadEventSceneCommand _)
+        {
+            await m_sceneLoaderService.UnloadAdventureEventsSceneAsync();
         }
     }
 }

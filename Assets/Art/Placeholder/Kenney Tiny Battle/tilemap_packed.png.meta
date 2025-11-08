@@ -165,7 +165,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -1545,7 +1545,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: tilemap_packed_61
+      name: Tile_Selection
       rect:
         serializedVersion: 2
         x: 112
@@ -3290,8 +3290,8 @@ TextureImporter:
         y: 48
         width: 16
         height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 6
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -4577,6 +4577,7 @@ TextureImporter:
       Boat_Blue: -664646272
       Island_Full_01: -5773244093850934461
       Ocean_Full: 1702621273
+      Tile_Selection: -1030741569
       tilemap_packed_0: -1453350334737186109
       tilemap_packed_10: 8654281846431810975
       tilemap_packed_100: 1253099718
@@ -4730,7 +4731,6 @@ TextureImporter:
       tilemap_packed_59: -2144723689
       tilemap_packed_6: 7454484266408833828
       tilemap_packed_60: -230418593
-      tilemap_packed_61: -1030741569
       tilemap_packed_62: -231114702
       tilemap_packed_63: 2127950505
       tilemap_packed_64: 84862957

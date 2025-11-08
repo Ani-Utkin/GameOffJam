@@ -20,9 +20,13 @@ namespace TRSI.GamePlay.AdventureMap
             builder.RegisterInstance(boatView);
             builder.RegisterInstance(debugCanvas);
             
+            builder.Register<AdventureMapController>(Lifetime.Scoped);
+            
             builder.RegisterVitalRouter(routing =>
             {
                 routing.Map<DebugRoutes>();
+                routing.Map<InputRoutes>();
+                routing.Map<GameEventsRoute>();
             });
             
             builder.UseEntryPoints(cfg =>

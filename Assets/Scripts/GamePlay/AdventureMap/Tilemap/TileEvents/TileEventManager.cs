@@ -3,6 +3,9 @@ using UnityEngine.UI;
 
 namespace GamePlay.AdventureMap.Tilemap.TileEvents
 {
+    /// <summary>
+    ///  Unused.
+    /// </summary>
     public class TileEventManager : MonoBehaviour
     {
 

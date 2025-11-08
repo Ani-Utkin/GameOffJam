@@ -16,10 +16,12 @@ namespace RTSI.Services
         [SerializeField] SceneReference mainMenuScene;
         [SerializeField] SceneReference playScene;
         [SerializeField] SceneReference pauseMenuScene;
+        [SerializeField] SceneReference adventureEventsScene;
         
         SceneInstance  m_mainMenuSceneInstance;
         SceneInstance  m_playSceneInstance;
         SceneInstance m_pauseMenuSceneInstance;
+        SceneInstance m_adventureEventsSceneInstance;
         
         public async UniTask LoadMainMenuSceneAsync()
         {
@@ -56,6 +58,18 @@ namespace RTSI.Services
         {
              if (m_pauseMenuSceneInstance.Scene.isLoaded)
                  m_pauseMenuSceneInstance = await Addressables.UnloadSceneAsync(m_pauseMenuSceneInstance);
+        }
+
+        public async UniTask LoadAdventureEventsSceneAsync()
+        {
+            if (!m_adventureEventsSceneInstance.Scene.isLoaded)   
+                m_adventureEventsSceneInstance = await Addressables.LoadSceneAsync(adventureEventsScene.Guid, LoadSceneMode.Additive);
+        }
+        
+        public async UniTask UnloadAdventureEventsSceneAsync()
+        {
+            if (m_adventureEventsSceneInstance.Scene.isLoaded)
+                m_adventureEventsSceneInstance = await Addressables.UnloadSceneAsync(m_adventureEventsSceneInstance);
         }
         
     }

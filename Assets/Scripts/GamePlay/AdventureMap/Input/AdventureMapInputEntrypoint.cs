@@ -4,6 +4,7 @@ using RTSI.GameEntrypoint;
 using TRSI.GamePlay.AdventureMap;
 using TRSI.GamePlay.AdventureMap.Routes;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using VContainer;
 using VContainer.Unity;
@@ -12,7 +13,12 @@ using Random = UnityEngine.Random;
 
 namespace RTSI.GamePlay.AdventureMap.Input
 {
-    public class AdventureMapInputEntrypoint : IStartable, IDisposable
+    /// <summary>
+    /// This class should only handle input-related stuff.
+    /// When an input is valid, it should send a message so that movement/events/tile highlights
+    /// can be handled by their own controllers.
+    /// </summary>
+    public class AdventureMapInputEntrypoint : IStartable, IDisposable, ITickable
     {
         [Inject] ICommandPublisher m_commandPublisher;
         [Inject] OceanGrid m_oceanGrid;
@@ -20,9 +26,9 @@ namespace RTSI.GamePlay.AdventureMap.Input
         [Inject] BoatView m_boatView;
         
         AdventureMapInputs m_inputs;
+        bool               m_isPointerBlocked;
         
         TileEventManager m_Panel;
-        
         Vector2 m_mousePosition;
         Vector2 currentPosition;
         
@@ -35,9 +41,23 @@ namespace RTSI.GamePlay.AdventureMap.Input
             m_inputs.Player.PointerPosition.performed += OnPointerMoved;
             m_inputs.Player.PauseMenu.performed       += OnPauseMenu;
             
-            
-            m_Panel = GameObject.Find("Tile Event Manager").GetComponent<TileEventManager>();
+         
+            /*
+             * This should have been referenced using [inject]. To do so:
+             * - add a `[SerializedField] TileEventManager tileEventManager` attribute in AdventureMapLifetimeScope
+             * - Register in the `Configure(IContainerBuilder builder)` method using `builder.RegisterInstance(tileEventManager);`
+             */
+            // m_Panel = GameObject.Find("Tile Event Manager").GetComponent<TileEventManager>();
         }
+        
+        
+        
+        public void Tick()
+        {
+            // Checking if the mouse is blocked by the UI
+            m_isPointerBlocked = EventSystem.current.IsPointerOverGameObject(Mouse.current.deviceId);
+        }
+        
 
         void OnPauseMenu(InputAction.CallbackContext obj)
         {
@@ -46,80 +66,79 @@ namespace RTSI.GamePlay.AdventureMap.Input
 
         void OnPointerMoved(InputAction.CallbackContext ctx)
         {
-            
-            /*
-             * This is temp debug stuff
-             */
-            
             Vector2 position = ctx.ReadValue<Vector2>();
             m_mousePosition = position;
-            position = m_mainCamera.ScreenToWorldPoint(position);
+            Vector2 worldPosition        = m_mainCamera.ScreenToWorldPoint(position);
             
-            
-            var gridPosition = m_oceanGrid.WorldToGrid(position);
-
-            OceanTileType oceanTileType = OceanTileType.None;
-            
-            if (m_oceanGrid.TryGetTile(position, out var tile))
-            {
-                oceanTileType = tile.OceanTileType;
-            }
-            
-            m_commandPublisher.PublishAsync(new DebugMouseInfos()
+            m_commandPublisher.PublishAsync(new OnPointerMovedCommand
             {
                 Position = position,
-                GridPosition = gridPosition,
-                OceanTileType = oceanTileType,
+                WorldPosition = worldPosition,
             });
         }
 
         void OnPointerClick(InputAction.CallbackContext ctx)
         {
-            var mouseWorldPosition = m_mainCamera.ScreenToWorldPoint(m_mousePosition);
-            if (m_oceanGrid.TryGetTile(mouseWorldPosition, out var tile))
+
+            if (m_isPointerBlocked) return;
+
+            // Notify other systems about the click
+            m_commandPublisher.PublishAsync(new OnPointerClickedCommand
             {
-                if (tile.OceanTileType == OceanTileType.None)
-                {
-                    // Not a useable tile
-                    Debug.Log("This is not  a valid Tile!");
-                    m_boatView.isSelected = false;
-                }
-                else
-                {
-                    // Useable tile.
-                    // We can get the tile's world position back
-                    var targetPosition = m_oceanGrid.WorldToGridSpace(mouseWorldPosition);
-                    Vector3 difference = m_boatView.WorldPosition - targetPosition; // calculate if selected tile contains boat
-                    
-                    //if the boat is in the selected tile
-                    if (difference is { x: 1.0f, y: 1.0f})
-                    {
-                        Debug.Log("Boat Here!");
-                        m_boatView.isSelected = true;
-                        currentPosition = targetPosition;
-                        // Highlight tile and adjacent tiles
-                        
-                    }
-                    else if (m_boatView.isSelected)
-                    {
-                        Debug.Log("Target Tile: " + targetPosition + " Boat Current Position: " + m_boatView.WorldPosition);
-                        checkValidTileMovement(targetPosition, m_boatView.WorldPosition);
-                        m_boatView.isSelected = false;
-                        m_Panel.ShowPanel("Boat Here", Random.Range(1, 21));
-                    }
-                    else
-                    {
-                        Debug.Log("Boat Not Here!");
-                        m_boatView.isSelected = false;
-                        // Unhighlight tiles
-                    }
-                }
-            }
-            else
-            {
-                // We clicked somewhere where there is no tile
-                Debug.Log("This is not  a valid Tile!");
-            }
+                Position      = m_mousePosition,
+                WorldPosition = m_mainCamera.ScreenToWorldPoint(m_mousePosition),
+
+            });
+            
+            /*
+             * Not really the right place for this code or this function will quickly become huge.
+             * Just send the OnPointerClickedCommand and let another controller handle the rest.
+             */
+            // var mouseWorldPosition = m_mainCamera.ScreenToWorldPoint(m_mousePosition);
+            // if (m_oceanGrid.TryGetTile(mouseWorldPosition, out var tile))
+            // {
+            //     if (tile.OceanTileType == OceanTileType.None)
+            //     {
+            //         // Not a useable tile
+            //         Debug.Log("This is not  a valid Tile!");
+            //         m_boatView.isSelected = false;
+            //     }
+            //     else
+            //     {
+            //         // Useable tile.
+            //         // We can get the tile's world position back
+            //         var targetPosition = m_oceanGrid.WorldToGridSpace(mouseWorldPosition);
+            //         Vector3 difference = m_boatView.WorldPosition - targetPosition; // calculate if selected tile contains boat
+            //         
+            //         //if the boat is in the selected tile
+            //         if (difference is { x: 1.0f, y: 1.0f})
+            //         {
+            //             Debug.Log("Boat Here!");
+            //             m_boatView.isSelected = true;
+            //             currentPosition = targetPosition;
+            //             // Highlight tile and adjacent tiles
+            //             
+            //         }
+            //         else if (m_boatView.isSelected)
+            //         {
+            //             Debug.Log("Target Tile: " + targetPosition + " Boat Current Position: " + m_boatView.WorldPosition);
+            //             checkValidTileMovement(targetPosition, m_boatView.WorldPosition);
+            //             m_boatView.isSelected = false;
+            //             m_Panel.ShowPanel("Boat Here", Random.Range(1, 21));
+            //         }
+            //         else
+            //         {
+            //             Debug.Log("Boat Not Here!");
+            //             m_boatView.isSelected = false;
+            //             // Unhighlight tiles
+            //         }
+            //     }
+            // }
+            // else
+            // {
+            //     // We clicked somewhere where there is no tile
+            //     Debug.Log("This is not  a valid Tile!");
+            // }
         }
 
         private void checkValidTileMovement(Vector2 targetTile, Vector3 boatPosition)

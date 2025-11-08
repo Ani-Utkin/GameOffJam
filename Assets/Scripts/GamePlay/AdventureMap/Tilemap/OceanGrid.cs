@@ -8,7 +8,11 @@ namespace TRSI.GamePlay.AdventureMap
     {
         [SerializeField] Grid grid;
         [SerializeField] Tilemap mainTilemap;
-
+        [SerializeField] Tilemap overlayTilemap;
+        
+        [Header("Tile References")]
+        [SerializeField] TileBase highlightTile;
+        
         public float TileUnit => grid.cellSize.x;
 
         public Vector3Int WorldToGrid(Vector2 worldPosition)
@@ -20,6 +24,11 @@ namespace TRSI.GamePlay.AdventureMap
         {
             var gridPosition = grid.WorldToCell(worldPosition);
             return grid.CellToWorld(gridPosition);
+        }
+
+        public Vector2 GridToWorld(Vector3Int gridPosition)
+        {
+            return  grid.CellToWorld(gridPosition);
         }
         
 
@@ -35,6 +44,37 @@ namespace TRSI.GamePlay.AdventureMap
             }
             
             return false;
+        }
+        
+        public void HighLightValidMoves(Vector3Int boatGridPosition)
+        {
+            overlayTilemap.ClearAllTiles();
+            
+            var directions = new Vector3Int[]
+            {
+                new Vector3Int(1, 0, 0),
+                new Vector3Int(-1, 0, 0),
+                new Vector3Int(0, 1, 0),
+                new Vector3Int(0, -1, 0),
+            };
+
+            foreach (var dir in directions)
+            {
+                var checkPos = boatGridPosition + dir;
+                if (mainTilemap.HasTile(checkPos))
+                {
+                    var tile = mainTilemap.GetTile<OceanTile>(checkPos);
+                    if (tile.OceanTileType != OceanTileType.None)
+                    {
+                        overlayTilemap.SetTile(checkPos, highlightTile);
+                    }
+                }
+            }
+        }
+        
+        public void ClearAllHighlights()
+        {
+            overlayTilemap.ClearAllTiles();
         }
     }
 }

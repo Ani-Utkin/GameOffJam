@@ -30,6 +30,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 97a62e6ae9e08ed49a81d496d792ad26
+    m_Address: Assets/Scenes/AdventureEventsScene.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 1bafc34acad223b4980d40c172c03200, type: 2}
   m_SchemaSet:
