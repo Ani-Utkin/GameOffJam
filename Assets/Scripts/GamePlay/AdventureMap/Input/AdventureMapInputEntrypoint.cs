@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 using VContainer;
 using VContainer.Unity;
 using VitalRouter;
+using Random = UnityEngine.Random;
 
 namespace RTSI.GamePlay.AdventureMap.Input
 {
@@ -104,7 +105,7 @@ namespace RTSI.GamePlay.AdventureMap.Input
                         Debug.Log("Target Tile: " + targetPosition + " Boat Current Position: " + m_boatView.WorldPosition);
                         checkValidTileMovement(targetPosition, m_boatView.WorldPosition);
                         m_boatView.isSelected = false;
-                        m_Panel.ShowPanel("Boat Here");
+                        m_Panel.ShowPanel("Boat Here", Random.Range(1, 21));
                     }
                     else
                     {

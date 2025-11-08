@@ -8,9 +8,9 @@ namespace GamePlay.AdventureMap.Tilemap.TileEvents
 
         public GameObject TileEventPanel;
 
-        public void ShowPanel(string eventName)
+        public void ShowPanel(string eventName, int random)
         {
-            TileEventPanel.SetActive(true);
+            TileEventPanel.SetActive(random < 10);
         }
 
     }
