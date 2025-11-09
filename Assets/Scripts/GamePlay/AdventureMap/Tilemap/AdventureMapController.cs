@@ -8,17 +8,17 @@ namespace TRSI.GamePlay.AdventureMap
 {
     public class AdventureMapController
     {
-        [Inject] OceanGrid m_oceanGrid;
-        [Inject] BoatView m_boatView;
+        [Inject] OceanGrid         m_oceanGrid;
+        [Inject] BoatView          m_boatView;
         [Inject] ICommandPublisher m_commandPublisher;
-        [Inject] List<PirateView> m_pirates;
+        [Inject] List<PirateView>  m_pirates;
 
 
         public void OnMapClicked(Vector2 mouseWorldPosition)
         {
             var gridPosition = m_oceanGrid.WorldToGrid(mouseWorldPosition);
             var boatToGrid = m_oceanGrid.WorldToGrid(m_boatView.WorldPosition);
-            
+
             if (gridPosition == boatToGrid)
             {
                 // We clicked on the boat
@@ -30,7 +30,7 @@ namespace TRSI.GamePlay.AdventureMap
 
             if (!m_oceanGrid.TryGetTile(mouseWorldPosition, out var tile))
                 return;
-            
+
             if (tile.OceanTileType == OceanTileType.None)
             {
                 // We clicked on a non-navigable tile
@@ -46,37 +46,17 @@ namespace TRSI.GamePlay.AdventureMap
                 // We clicked on a valid adjacent tile
                 // Move the boat
                 m_boatView.MoveShip(m_oceanGrid.GridToWorld(gridPosition));
-                
+
                 m_boatView.IsSelected = false;
                 m_oceanGrid.ClearAllHighlights();
 
                 // Notify other systems about the move (GameEventsRoute will handle loading events)
                 m_commandPublisher.PublishAsync(new ShipMovedCommand
                 {
-                    TileType = tile.OceanTileType,
+                    TileType = tile.OceanTileType
                 });
-                
-                
-                // Move Pirate Ships in a random direction
-                foreach (PirateView pirate in m_pirates)
-                {
-                    var pirateToGrid = m_oceanGrid.WorldToGrid(pirate.WorldPosition);
-                    
-                    var directions = new Vector3Int[]
-                    {
-                        new Vector3Int(2, 0, 0),
-                        new Vector3Int(-2, 0, 0),
-                        new Vector3Int(0, 2, 0),
-                        new Vector3Int(0, -2, 0),
-                    };
-            
-                   var currentPosition = pirateToGrid + directions[Random.Range(0, directions.Length)];
-                    UnityEngine.Debug.Log("Pirate Next Position: " + currentPosition);
-                    if (m_oceanGrid.TryGetTile(currentPosition, out tile))
-                    {
-                        pirate.MoveShip(currentPosition);
-                    }
-                }
+
+                MovePirateShips();
             }
             else
             {
@@ -84,7 +64,37 @@ namespace TRSI.GamePlay.AdventureMap
                 m_boatView.IsSelected = false;
                 m_oceanGrid.ClearAllHighlights();
             }
-            
+        }
+
+        void MovePirateShips()
+        {
+            // Move Pirate Ships in a random direction
+            foreach (var pirate in m_pirates)
+            {
+                var pirateToGrid = m_oceanGrid.WorldToGrid(pirate.WorldPosition);
+
+                var directions = new Vector3Int[]
+                {
+                    new(1, 0, 0),
+                    new(-1, 0, 0),
+                    new(0, 1, 0),
+                    new(0, -1, 0)
+                };
+
+                var newGridPosition = Vector3Int.zero;
+                var found = false;
+                while (!found)
+                {
+                    newGridPosition = pirateToGrid + directions[Random.Range(0, directions.Length)];
+                    if (m_oceanGrid.TryGetTile(newGridPosition, out var tile))
+                        if (!(tile.OceanTileType is OceanTileType.None or OceanTileType.Island))
+                            found = true;
+                }
+
+                var newWorldPosition = m_oceanGrid.GridToWorld(newGridPosition);
+                UnityEngine.Debug.Log($"Pirate Next Position: GS {newGridPosition} | WS {newWorldPosition}");
+                pirate.MoveShip(newWorldPosition);
+            }
         }
     }
 }

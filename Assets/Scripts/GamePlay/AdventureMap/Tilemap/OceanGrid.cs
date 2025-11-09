@@ -45,6 +45,17 @@ namespace TRSI.GamePlay.AdventureMap
             
             return false;
         }
+
+        public bool TryGetTile(Vector3Int gridPosition, out OceanTile tile)
+        {
+            tile = null;
+            if (mainTilemap.HasTile(gridPosition))
+            {
+                tile = mainTilemap.GetTile<OceanTile>(gridPosition);
+                return true;
+            }
+            return false;
+        }
         
         public void HighLightValidMoves(Vector3Int boatGridPosition)
         {
