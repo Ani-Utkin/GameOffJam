@@ -1,4 +1,5 @@
-﻿using TRSI.GamePlay.AdventureMap.Routes;
+﻿using System.Collections.Generic;
+using TRSI.GamePlay.AdventureMap.Routes;
 using UnityEngine;
 using VContainer;
 using VitalRouter;
@@ -10,6 +11,7 @@ namespace TRSI.GamePlay.AdventureMap
         [Inject] OceanGrid m_oceanGrid;
         [Inject] BoatView m_boatView;
         [Inject] ICommandPublisher m_commandPublisher;
+        [Inject] List<PirateView> m_pirates;
 
 
         public void OnMapClicked(Vector2 mouseWorldPosition)
@@ -53,6 +55,28 @@ namespace TRSI.GamePlay.AdventureMap
                 {
                     TileType = tile.OceanTileType,
                 });
+                
+                
+                // Move Pirate Ships in a random direction
+                foreach (PirateView pirate in m_pirates)
+                {
+                    var pirateToGrid = m_oceanGrid.WorldToGrid(pirate.WorldPosition);
+                    
+                    var directions = new Vector3Int[]
+                    {
+                        new Vector3Int(2, 0, 0),
+                        new Vector3Int(-2, 0, 0),
+                        new Vector3Int(0, 2, 0),
+                        new Vector3Int(0, -2, 0),
+                    };
+            
+                   var currentPosition = pirateToGrid + directions[Random.Range(0, directions.Length)];
+                    UnityEngine.Debug.Log("Pirate Next Position: " + currentPosition);
+                    if (m_oceanGrid.TryGetTile(currentPosition, out tile))
+                    {
+                        pirate.MoveShip(currentPosition);
+                    }
+                }
             }
             else
             {

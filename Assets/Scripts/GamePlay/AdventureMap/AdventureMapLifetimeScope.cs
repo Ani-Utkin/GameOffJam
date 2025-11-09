@@ -1,4 +1,5 @@
-﻿using RTSI.GamePlay.AdventureMap.Input;
+﻿using System.Collections.Generic;
+using RTSI.GamePlay.AdventureMap.Input;
 using TRSI.GamePlay.AdventureMap.Debug;
 using TRSI.GamePlay.AdventureMap.Routes;
 using UnityEngine;
@@ -13,12 +14,15 @@ namespace TRSI.GamePlay.AdventureMap
         [SerializeField] OceanGrid grid;
         [SerializeField] BoatView boatView;
         [SerializeField] DebugCanvas debugCanvas;
+        [SerializeField] List<PirateView> pirateShips;
         
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterInstance(grid);
             builder.RegisterInstance(boatView);
             builder.RegisterInstance(debugCanvas);
+            
+            builder.RegisterInstance(pirateShips);
             
             builder.Register<AdventureMapController>(Lifetime.Scoped);
             
