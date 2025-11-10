@@ -16,6 +16,6 @@ MonoBehaviour:
   eOceanTileType: 0
   tileEvents:
   - EventDefinitionBase: {fileID: 11400000, guid: 83a471e7a26f6e8448bebd87d6f70d32, type: 2}
-    Weight: 100
+    Weight: 50
   - EventDefinitionBase: {fileID: 11400000, guid: 40ed6c89973d10e4bb7aee5c19224701, type: 2}
     Weight: 50

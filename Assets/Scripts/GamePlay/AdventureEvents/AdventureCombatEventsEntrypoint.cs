@@ -1,7 +1,10 @@
 ﻿using System;
 using GamePlay.AdventureEvents.Views;
 using RTSI.Services;
+using ScriptableObjects;
+using ScriptableObjects.Events;
 using TRSI.GamePlay.AdventureMap.Routes;
+using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 using VitalRouter;
@@ -17,20 +20,29 @@ namespace GamePlay.AdventureEvents
         [Inject] ICommandSubscribable m_commandSubscriber;
 
         Subscription m_subscription;
+        CombatStats m_mobCombatStats;
         
         public void Start()
         {
             m_eventPanel.TempQuitButton.onClick.AddListener(OnQuitClicked);
 
             m_eventPanel.PlayerHealthText.text = $"Player Health : {m_playerStatsService.CurrentHealth}";
-
-
+            
             m_subscription = m_commandSubscriber.Subscribe<EventStartCommand>(OnEventStarted);
         }
 
-        void OnEventStarted(EventStartCommand arg1, PublishContext arg2)
+        void OnEventStarted(EventStartCommand cmd, PublishContext ctx)
         {
-            
+            var mob = (cmd.EventDefinitionBase as CombatEventDefinition)?.MobDefinition;
+
+            if (mob == null)
+            {
+                Debug.LogError($"[{nameof(AdventureCombatEventsEntrypoint)}] Mob definition is null in combat event");
+                return;
+            }
+
+            m_mobCombatStats = mob.CombatStats;
+
         }
 
         void OnQuitClicked()
