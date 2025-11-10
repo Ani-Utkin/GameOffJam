@@ -1,4 +1,7 @@
-﻿using RTSI.GameEntrypoint;
+﻿using Cysharp.Threading.Tasks;
+using GamePlay.AdventureEvents;
+using RTSI.GameEntrypoint;
+using RTSI.Services;
 using VContainer;
 using VitalRouter;
 
@@ -10,15 +13,20 @@ namespace TRSI.GamePlay.AdventureMap.Routes
         [Inject] ICommandPublisher m_commandPublisher;
         
         [Route]
-        void On(ShipMovedCommand command)
+        async UniTask On(ShipMovedCommand command)
         {
-            m_commandPublisher.PublishAsync(new LoadEventSceneCommand());
+            await m_commandPublisher.PublishAsync(new LoadEventSceneCommand());
+            await m_commandPublisher.PublishAsync(new EventStartCommand
+            {
+                EventDefinitionBase = command.Event,
+            });
+            
         }
 
         [Route]
-        void On(EventEndedCommand _)
+        async UniTask On(EventEndedCommand _)
         {
-            m_commandPublisher.PublishAsync(new UnloadEventSceneCommand());
+            await m_commandPublisher.PublishAsync(new UnloadEventSceneCommand());
         }
     }
 }

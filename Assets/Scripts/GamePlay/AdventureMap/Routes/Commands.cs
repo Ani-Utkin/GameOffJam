@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using ScriptableObjects;
+using ScriptableObjects.Events;
+using UnityEngine;
 using VitalRouter;
 
 namespace TRSI.GamePlay.AdventureMap.Routes
@@ -17,10 +19,17 @@ namespace TRSI.GamePlay.AdventureMap.Routes
 
     public struct ShipMovedCommand : ICommand
     {
-        public OceanTileType TileType;
+        public EventDefinitionBase Event;
     }
     
     public struct EventEndedCommand : ICommand
     {
     }
+    
+    
+    public struct EventStartCommand : ICommand
+    {
+        public EventDefinitionBase EventDefinitionBase;
+    }
+
 }

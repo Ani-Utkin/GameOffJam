@@ -32,26 +32,26 @@ namespace TRSI.GamePlay.AdventureMap
         }
         
 
-        public bool TryGetTile(Vector3 worldPosition, out OceanTile tile)
+        public bool TryGetTile(Vector3 worldPosition, out GameTile tile)
         {
             tile = null;
             
             var wtc = grid.WorldToCell(worldPosition);
             if (mainTilemap.HasTile(wtc))
             {
-                tile = mainTilemap.GetTile<OceanTile>(wtc);
+                tile = mainTilemap.GetTile<GameTile>(wtc);
                 return true;
             }
             
             return false;
         }
 
-        public bool TryGetTile(Vector3Int gridPosition, out OceanTile tile)
+        public bool TryGetTile(Vector3Int gridPosition, out GameTile tile)
         {
             tile = null;
             if (mainTilemap.HasTile(gridPosition))
             {
-                tile = mainTilemap.GetTile<OceanTile>(gridPosition);
+                tile = mainTilemap.GetTile<GameTile>(gridPosition);
                 return true;
             }
             return false;
@@ -74,8 +74,8 @@ namespace TRSI.GamePlay.AdventureMap
                 var checkPos = boatGridPosition + dir;
                 if (mainTilemap.HasTile(checkPos))
                 {
-                    var tile = mainTilemap.GetTile<OceanTile>(checkPos);
-                    if (tile.OceanTileType != OceanTileType.None)
+                    var tile = mainTilemap.GetTile<GameTile>(checkPos);
+                    if (tile.EOceanTileType != EOceanTileType.None)
                     {
                         overlayTilemap.SetTile(checkPos, highlightTile);
                     }

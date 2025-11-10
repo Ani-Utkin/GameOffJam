@@ -31,7 +31,7 @@ namespace TRSI.GamePlay.AdventureMap
             if (!m_oceanGrid.TryGetTile(mouseWorldPosition, out var tile))
                 return;
 
-            if (tile.OceanTileType == OceanTileType.None)
+            if (tile.EOceanTileType == EOceanTileType.None)
             {
                 // We clicked on a non-navigable tile
                 m_boatView.IsSelected = false;
@@ -53,7 +53,7 @@ namespace TRSI.GamePlay.AdventureMap
                 // Notify other systems about the move (GameEventsRoute will handle loading events)
                 m_commandPublisher.PublishAsync(new ShipMovedCommand
                 {
-                    TileType = tile.OceanTileType
+                    Event = tile.GetRandomEvent()
                 });
 
                 MovePirateShips();
@@ -87,7 +87,7 @@ namespace TRSI.GamePlay.AdventureMap
                 {
                     newGridPosition = pirateToGrid + directions[Random.Range(0, directions.Length)];
                     if (m_oceanGrid.TryGetTile(newGridPosition, out var tile))
-                        if (!(tile.OceanTileType is OceanTileType.None or OceanTileType.Island))
+                        if (!(tile.EOceanTileType is EOceanTileType.None or EOceanTileType.Island))
                             found = true;
                 }
 

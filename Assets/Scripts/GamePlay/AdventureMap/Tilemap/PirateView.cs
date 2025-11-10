@@ -35,7 +35,7 @@ namespace TRSI.GamePlay.AdventureMap
             
             currentPosition = currentPosition + directions[Random.Range(0, directions.Length)];
             UnityEngine.Debug.Log("Pirate Next Position: " + currentPosition);
-            if (m_oceanGrid.TryGetTile(currentPosition, out OceanTile tile))
+            if (m_oceanGrid.TryGetTile(currentPosition, out GameTile tile))
             {
                 MoveShip(currentPosition);
             }

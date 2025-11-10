@@ -19,11 +19,11 @@ namespace TRSI.GamePlay.AdventureMap.Routes
         {
             var gridPosition = m_oceanGrid.WorldToGrid(cmd.WorldPosition);
 
-            OceanTileType oceanTileType = OceanTileType.None;
+            EOceanTileType eOceanTileType = EOceanTileType.None;
             
             if (m_oceanGrid.TryGetTile(cmd.WorldPosition, out var tile))
             {
-                oceanTileType = tile.OceanTileType;
+                eOceanTileType = tile.EOceanTileType;
             }
             
             // Send the debug infos to the DebugRoutes
@@ -31,7 +31,7 @@ namespace TRSI.GamePlay.AdventureMap.Routes
             {
                 Position      = cmd.WorldPosition,
                 GridPosition  = gridPosition,
-                OceanTileType = oceanTileType,
+                EOceanTileType = eOceanTileType,
             });
         }
 

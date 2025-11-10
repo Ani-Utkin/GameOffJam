@@ -9,7 +9,7 @@ namespace TRSI.GamePlay.AdventureMap.Routes
     {
         public Vector2    Position;
         public Vector3Int GridPosition;
-        public OceanTileType OceanTileType;
+        public EOceanTileType EOceanTileType;
     }
     
     [Routes]

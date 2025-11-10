@@ -7,30 +7,26 @@ using VitalRouter;
 
 namespace GamePlay.AdventureEvents
 {
-    /// <summary>
-    ///  Entry point for Adventure Events related logic.
-    ///  Random event selection could be added here in the future, dynamically populating the event scene.
-    /// </summary>
-    public class AdventureEventsEntrypoint : IStartable, IDisposable
+    public class AdventureCombatEventsEntrypoint : IStartable, IDisposable
     {
-        [Inject] AdventureEventCanvas m_eventCanvas;
+        [Inject] CombatEventPanel  m_eventPanel;
         [Inject] ICommandPublisher m_commandPublisher;
-
-
+        
         public void Start()
         {
-            m_eventCanvas.QuitButton.onClick.AddListener(OnQuitClicked);
+            m_eventPanel.TempQuitButton.onClick.AddListener(OnQuitClicked);
         }
-
+        
         void OnQuitClicked()
         {
             // Notify that the event has ended
             m_commandPublisher.PublishAsync(new EventEndedCommand());
         }
-
+        
         public void Dispose()
         {
-            m_eventCanvas.QuitButton.onClick.RemoveAllListeners();
+            m_eventPanel.TempQuitButton.onClick.RemoveAllListeners();
         }
+
     }
 }

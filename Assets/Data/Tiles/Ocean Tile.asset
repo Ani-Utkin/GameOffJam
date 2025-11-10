@@ -10,7 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 473b95d807364ed3bc98b31291e4a63f, type: 3}
-  m_Name: Island Tile
+  m_Name: Ocean Tile
   m_EditorClassIdentifier: Assembly-CSharp::TRSI.GamePlay.AdventureMap.OceanTile
-  sprite: {fileID: -5773244093850934461, guid: 5f740b94fbb505741828234e57a0eb98, type: 3}
-  oceanTileType: 1
+  sprite: {fileID: 1702621273, guid: 5f740b94fbb505741828234e57a0eb98, type: 3}
+  eOceanTileType: 0
+  tileEvents:
+  - EventDefinitionBase: {fileID: 11400000, guid: 83a471e7a26f6e8448bebd87d6f70d32, type: 2}
+    Weight: 100
+  - EventDefinitionBase: {fileID: 11400000, guid: 40ed6c89973d10e4bb7aee5c19224701, type: 2}
+    Weight: 50

@@ -18,7 +18,7 @@ namespace TRSI.GamePlay.AdventureMap.Debug
 
         public void DebugMouseInfos(DebugMouseInfos infos)
         {
-            debugLabel.text = $"Mouse Position: WS : {infos.Position} , GS {infos.GridPosition}, Tile Type {infos.OceanTileType.ToString()}";
+            debugLabel.text = $"Mouse Position: WS : {infos.Position} , GS {infos.GridPosition}, Tile Type {infos.EOceanTileType.ToString()}";
         }
     }
 }

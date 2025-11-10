@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87693fca0d8d4e51a71b3f2df0bb0622, type: 3}
+  m_Name: Simple Fight Event
+  m_EditorClassIdentifier: Assembly-CSharp::ScriptableObjects.CombatEventDefinition
+  <EventText>k__BackingField: This is a fight!
+  <EventSprite>k__BackingField: {fileID: 1702621273, guid: 5f740b94fbb505741828234e57a0eb98, type: 3}
+  <ButtonText>k__BackingField: Continue
+  <MobDefinition>k__BackingField: {fileID: 11400000, guid: 558dd21074892504f8d428094c196852, type: 2}
