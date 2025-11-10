@@ -6,5 +6,6 @@ namespace ScriptableObjects.Mobs
     public class MobDefinitionBase : ScriptableObject
     {
         [field:SerializeField] public Sprite MobSprite { get; private set; }
+        [field:SerializeField] public CombatStats CombatStats { get; private set; }
     }
 }

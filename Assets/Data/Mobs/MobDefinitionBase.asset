@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: MobDefinitionBase
   m_EditorClassIdentifier: Assembly-CSharp::ScriptableObjects.Mobs.MobDefinitionBase
   <MobSprite>k__BackingField: {fileID: -2063804436, guid: 5f740b94fbb505741828234e57a0eb98, type: 3}
+  <CombatStats>k__BackingField: {fileID: 11400000, guid: 38b918c8a018ad34a85193df499c297a, type: 2}

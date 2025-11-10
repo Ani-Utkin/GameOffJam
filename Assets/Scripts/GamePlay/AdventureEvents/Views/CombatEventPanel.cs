@@ -1,5 +1,7 @@
 ﻿using ScriptableObjects.Events;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Utils;
 
@@ -13,6 +15,9 @@ namespace GamePlay.AdventureEvents.Views
         [SerializeField] Image eventImage;
         [SerializeField] Image mobImage;
 
+        [field: FormerlySerializedAs("<playerHealthText>k__BackingField")] [field:SerializeField] public TMP_Text PlayerHealthText { get; set; }
+        [SerializeField] TMP_Text mobHealthText;
+        
         public void Show()
         {
             canvasGroup.Show();
@@ -25,8 +30,9 @@ namespace GamePlay.AdventureEvents.Views
 
         public void Populate(CombatEventDefinition evt)
         {
-            eventImage.sprite = evt.EventSprite;
-            mobImage.sprite   = evt.MobDefinition.MobSprite;
+            eventImage.sprite  = evt.EventSprite;
+            mobImage.sprite    = evt.MobDefinition.MobSprite;
+            mobHealthText.text = $"Enemy Health {evt.MobDefinition.CombatStats.MaxHealth}";
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿
 using RTSI.Services;
+using ScriptableObjects;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -13,11 +14,14 @@ namespace RTSI.GameEntrypoint
     {
         [SerializeField] SceneLoaderService  sceneLoaderService;
         [SerializeField] Camera mainCamera;
-        
+        [SerializeField] CombatStats playerCombatStats;
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterInstance(sceneLoaderService);
             builder.RegisterInstance(mainCamera);
+
+
+            builder.Register<PlayerStatsService>(Lifetime.Singleton);
             
             builder.RegisterVitalRouter(routing =>
             {
@@ -28,6 +32,12 @@ namespace RTSI.GameEntrypoint
             {
                 cfg.Add<RootEntrypoint>();
                 cfg.OnException(Debug.LogException);
+            });
+            
+            builder.RegisterBuildCallback(container =>
+            {
+                var playerStatsService = container.Resolve<PlayerStatsService>();
+                playerStatsService.Initialize(playerCombatStats);
             });
         }
     }
