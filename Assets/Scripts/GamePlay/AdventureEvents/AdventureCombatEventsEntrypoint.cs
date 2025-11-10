@@ -33,7 +33,11 @@ namespace GamePlay.AdventureEvents
 
         void OnEventStarted(EventStartCommand cmd, PublishContext ctx)
         {
-            var mob = (cmd.EventDefinitionBase as CombatEventDefinition)?.MobDefinition;
+            
+            if (!(cmd.EventDefinitionBase is CombatEventDefinition combatEventDefinition))
+                return;
+            
+            var mob = combatEventDefinition.MobDefinition;
 
             if (mob == null)
             {
