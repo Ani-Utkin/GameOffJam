@@ -971,6 +971,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GamePlay.AdventureEvents.Views.CombatEventPanel
   canvasGroup: {fileID: 555645920}
   <TempQuitButton>k__BackingField: {fileID: 969044600}
+  <AttackButton>k__BackingField: {fileID: 1563026489}
+  <DodgeButton>k__BackingField: {fileID: 2139076221}
+  <FleeButton>k__BackingField: {fileID: 1839484933}
   eventImage: {fileID: 822576687}
   mobImage: {fileID: 2117986276}
   <PlayerHealthText>k__BackingField: {fileID: 760257619}

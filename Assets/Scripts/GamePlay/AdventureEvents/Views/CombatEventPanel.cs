@@ -12,9 +12,9 @@ namespace GamePlay.AdventureEvents.Views
         [SerializeField] CanvasGroup canvasGroup;
         [field:SerializeField] public Button TempQuitButton { get; private set; }
 
-        [SerializeField] public Button AttackButton { get; private set; }
-        [SerializeField] public Button DodgeButton { get; private set; }
-        [SerializeField] public Button FleeButton { get; private set; }
+        [field:SerializeField] public Button AttackButton { get; private set; }
+        [field:SerializeField] public Button DodgeButton { get; private set; }
+        [field:SerializeField] public Button FleeButton { get; private set; }
 
 
         [SerializeField] Image eventImage;
