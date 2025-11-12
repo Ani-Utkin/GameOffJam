@@ -8,6 +8,7 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 using VitalRouter;
+using Random = UnityEngine.Random;
 
 namespace GamePlay.AdventureEvents
 {
@@ -22,11 +23,20 @@ namespace GamePlay.AdventureEvents
         Subscription m_subscription;
         CombatStats m_mobCombatStats;
         
+        int m_mobCurrentHealth;
+
+        private bool m_IsPlayerTurn;
+        
         public void Start()
         {
             m_eventPanel.TempQuitButton.onClick.AddListener(OnQuitClicked);
+            m_eventPanel.AttackButton.onClick.AddListener(OnAttackClicked);
+            m_eventPanel.DodgeButton.onClick.AddListener(OnDodgeClicked);
+            m_eventPanel.FleeButton.onClick.AddListener(OnFleeClicked);
 
             m_eventPanel.PlayerHealthText.text = $"Player Health : {m_playerStatsService.CurrentHealth}";
+            
+            m_mobCurrentHealth = m_mobCombatStats.MaxHealth;
             
             m_subscription = m_commandSubscriber.Subscribe<EventStartCommand>(OnEventStarted);
         }
@@ -49,6 +59,39 @@ namespace GamePlay.AdventureEvents
 
         }
 
+        void OnAttackClicked()
+        {
+            //attack enemy
+            var damage = Random.Range(1,7);
+            Debug.Log($"[{nameof(AdventureCombatEventsEntrypoint)}] Damage : {damage}");
+            AttackEnemy(damage);
+        }
+
+        void AttackEnemy(int attackDamage)
+        {
+             m_mobCurrentHealth -= attackDamage;
+
+             if (m_mobCurrentHealth <= 0)
+             {
+                 m_commandPublisher.PublishAsync(new EventEndedCommand());
+             }
+        }
+
+        void AttackPlayer(int attackDamage)
+        {
+            m_playerStatsService.CurrentHealth -= attackDamage;
+        }
+
+        void OnDodgeClicked()
+        {
+            //Dodge - lowers enemy attack or increase player health?
+        }
+
+        void OnFleeClicked()
+        {
+            m_commandPublisher.PublishAsync(new EventEndedCommand());
+        }
+
         void OnQuitClicked()
         {
             // Notify that the event has ended
@@ -58,6 +101,9 @@ namespace GamePlay.AdventureEvents
         public void Dispose()
         {
             m_eventPanel.TempQuitButton.onClick.RemoveAllListeners();
+            m_eventPanel.AttackButton.onClick.RemoveAllListeners();
+            m_eventPanel.DodgeButton.onClick.RemoveAllListeners();
+            m_eventPanel.FleeButton.onClick.RemoveAllListeners();
             m_subscription.Dispose();
         }
 

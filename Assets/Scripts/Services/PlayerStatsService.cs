@@ -9,7 +9,7 @@ namespace RTSI.Services
         public int Dodge { get; private set; }
         public int Speed { get; private set; }
         
-        public int CurrentHealth { get; private set; }
+        public int CurrentHealth { get; set; }
         
         public void Initialize(CombatStats playerCombatStats)
         {
