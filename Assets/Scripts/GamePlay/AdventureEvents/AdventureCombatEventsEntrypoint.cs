@@ -1,4 +1,6 @@
 ﻿using System;
+using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Triggers;
 using GamePlay.AdventureEvents.Views;
 using RTSI.Services;
 using ScriptableObjects;
@@ -12,7 +14,7 @@ using Random = UnityEngine.Random;
 
 namespace GamePlay.AdventureEvents
 {
-    public class AdventureCombatEventsEntrypoint : IStartable, IDisposable
+    public class AdventureCombatEventsEntrypoint : IStartable, IDisposable, IAsyncUpdateHandler
     {
         [Inject] CombatEventPanel  m_eventPanel;
         [Inject] ICommandPublisher m_commandPublisher;
@@ -36,8 +38,6 @@ namespace GamePlay.AdventureEvents
 
             m_eventPanel.PlayerHealthText.text = $"Player Health : {m_playerStatsService.CurrentHealth}";
             
-            m_mobCurrentHealth = m_mobCombatStats.MaxHealth;
-            
             m_subscription = m_commandSubscriber.Subscribe<EventStartCommand>(OnEventStarted);
         }
 
@@ -56,9 +56,15 @@ namespace GamePlay.AdventureEvents
             }
 
             m_mobCombatStats = mob.CombatStats;
-
+            m_mobCurrentHealth = m_mobCombatStats.MaxHealth;
         }
-
+        
+        public UniTask UpdateAsync()
+        {
+            throw new NotImplementedException();
+        }
+        
+        
         void OnAttackClicked()
         {
             //attack enemy
@@ -70,7 +76,10 @@ namespace GamePlay.AdventureEvents
         void AttackEnemy(int attackDamage)
         {
              m_mobCurrentHealth -= attackDamage;
-
+             
+             Debug.Log("Current Health: " + m_mobCurrentHealth);
+             m_eventPanel.mobHealthText.text = $"Enemy Health {m_mobCurrentHealth}";
+             
              if (m_mobCurrentHealth <= 0)
              {
                  m_commandPublisher.PublishAsync(new EventEndedCommand());
@@ -106,6 +115,7 @@ namespace GamePlay.AdventureEvents
             m_eventPanel.FleeButton.onClick.RemoveAllListeners();
             m_subscription.Dispose();
         }
+
 
     }
 }

@@ -21,7 +21,7 @@ namespace GamePlay.AdventureEvents.Views
         [SerializeField] Image mobImage;
 
         [field: FormerlySerializedAs("<playerHealthText>k__BackingField")] [field:SerializeField] public TMP_Text PlayerHealthText { get; set; }
-        [SerializeField] TMP_Text mobHealthText;
+        [SerializeField] public TMP_Text mobHealthText;
         
         public void Show()
         {
