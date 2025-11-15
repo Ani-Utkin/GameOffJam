@@ -26,6 +26,7 @@ namespace GamePlay.AdventureEvents
         CombatStats m_mobCombatStats;
         
         int m_mobCurrentHealth;
+        int m_playerCurrentDodge;
 
         private bool m_IsPlayerTurn;
         
@@ -37,6 +38,8 @@ namespace GamePlay.AdventureEvents
             m_eventPanel.FleeButton.onClick.AddListener(OnFleeClicked);
 
             m_eventPanel.PlayerHealthText.text = $"Player Health : {m_playerStatsService.CurrentHealth}";
+
+            m_playerCurrentDodge = m_playerStatsService.Dodge;
             
             m_subscription = m_commandSubscriber.Subscribe<EventStartCommand>(OnEventStarted);
         }
@@ -70,7 +73,10 @@ namespace GamePlay.AdventureEvents
             //attack enemy
             var damage = Random.Range(1,7);
             Debug.Log($"[{nameof(AdventureCombatEventsEntrypoint)}] Damage : {damage}");
-            AttackEnemy(damage);
+            if (damage >= m_mobCombatStats.Dodge)
+            {
+                AttackEnemy(damage);
+            }
         }
 
         void AttackEnemy(int attackDamage)
@@ -89,16 +95,41 @@ namespace GamePlay.AdventureEvents
         void AttackPlayer(int attackDamage)
         {
             m_playerStatsService.CurrentHealth -= attackDamage;
+
+            if (m_playerStatsService.CurrentHealth <= 0)
+            {
+                // Lose battle
+            }
         }
 
         void OnDodgeClicked()
         {
-            //Dodge - lowers enemy attack or increase player health?
+            //Dodge
+            var dodge = Random.Range(1,7);
+            if (m_playerCurrentDodge > 0)
+            {
+                CheckDodge(dodge);
+            }
+        }
+
+        void CheckDodge(int dodge)
+        {
+            if (dodge < m_mobCombatStats.Attack)
+            {
+                AttackPlayer(m_mobCombatStats.Attack);
+            }
+
+            m_playerCurrentDodge--;
         }
 
         void OnFleeClicked()
         {
-            m_commandPublisher.PublishAsync(new EventEndedCommand());
+            var flee = Random.Range(1,7);
+
+            if (flee >= m_mobCombatStats.Speed)
+            { 
+                m_commandPublisher.PublishAsync(new EventEndedCommand());
+            }
         }
 
         void OnQuitClicked()
