@@ -99,6 +99,8 @@ namespace GamePlay.AdventureEvents
             if (m_playerStatsService.CurrentHealth <= 0)
             {
                 // Lose battle
+                m_playerStatsService.CurrentHealth = m_playerStatsService.MaxHealth;
+                m_commandPublisher.PublishAsync(new EventEndedCommand());
             }
         }
 
