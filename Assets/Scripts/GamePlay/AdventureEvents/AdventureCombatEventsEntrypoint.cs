@@ -85,10 +85,14 @@ namespace GamePlay.AdventureEvents
              
              Debug.Log("Current Health: " + m_mobCurrentHealth);
              m_eventPanel.mobHealthText.text = $"Enemy Health {m_mobCurrentHealth}";
-             
+              
              if (m_mobCurrentHealth <= 0)
              {
                  m_commandPublisher.PublishAsync(new EventEndedCommand());
+             }
+             else
+             {
+                AttackPlayer(m_mobCombatStats.Attack);
              }
         }
 
@@ -102,6 +106,8 @@ namespace GamePlay.AdventureEvents
                 m_playerStatsService.CurrentHealth = m_playerStatsService.MaxHealth;
                 m_commandPublisher.PublishAsync(new EventEndedCommand());
             }
+            
+           
         }
 
         void OnDodgeClicked()
@@ -131,6 +137,10 @@ namespace GamePlay.AdventureEvents
             if (flee >= m_mobCombatStats.Speed)
             { 
                 m_commandPublisher.PublishAsync(new EventEndedCommand());
+            }
+            else
+            {
+                AttackPlayer(m_mobCombatStats.Attack);
             }
         }
 
